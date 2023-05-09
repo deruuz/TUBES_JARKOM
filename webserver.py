@@ -1,7 +1,7 @@
 #mengimport module socket
 from socket import * 
 #Menginisialisasi alamat dan nomor port untuk server
-SERVER_ADDRESS = (HOST, PORT) = '0.0.0.0', 8888 
+SERVER_ADDRESS = (HOST, PORT) = 'localhost', 8888 
 #Menentukan ukuran antrian permintaan maksimum yang diterima oleh server
 REQUEST_QUEUE_SIZE = 5
 #Direktori tempat berkas-berkas website disimpan
