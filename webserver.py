@@ -34,13 +34,13 @@ def handle_request(client_connection: socket):  # menerima koneksi dari client
         if method == 'GET' or method == 'HEAD':  # jika method GET atau HEAD
             resource = data.split()[1]  # mengambil path yang dicari dari client
             print("data split 1", resource)  # menampilkan resource dari data split
-            resource = resource.split('?')[0][1:]  # memotong path resource sehingga tersisa hanya nama file saja
+            resource = resource.split('?')[0]  # memotong path resource sehingga tersisa hanya nama file saja
             print("resource split ?", resource.split('?'))  # menampilkan resource dari data split
 
             if resource == '/':  # jika resource sama dengan /
-                resource = 'index.html'  # maka resource sama dengan file\index.html
+                resource = '/index.html'  # maka resource sama dengan file\index.html
 
-            resource = os.path.join(FILE_DIRECTORY, resource)  # resource sama dengan file directory + resource
+            resource = os.path.join(FILE_DIRECTORY, resource[1:])  # resource sama dengan file directory + resource
             print("resource ", resource)
             header, body = create_respon(resource)  # membuat response dari resource
             http_response = header.encode()  # mengencode header
