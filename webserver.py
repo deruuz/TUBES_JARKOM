@@ -15,7 +15,7 @@ def http_header(code) -> str:
 		header = "HTTP/1.1 404 Page not found\n"
 
 	header += "Server:Kelompok 8 Web Server\n"
-	header += "Connection: Alive\n\n"
+	header += "Connection: keep-alive\n\n"
 	return header
 
 def handle_request(client_connection:socket):
