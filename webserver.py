@@ -46,6 +46,7 @@ def handle_request(client_connection:socket):
 			print("HTTP Response: " + str(http_response) + "\n")
 
 def create_respon(FILE_NAME):
+	# membuat response dari filename, jika file tidak ditemukan maka kembalikan 404 dan halaman not found
 	try:
 		file = open(FILE_NAME, 'rb')
 		body = file.read()
