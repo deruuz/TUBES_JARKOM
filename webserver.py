@@ -21,7 +21,6 @@ def http_header(code) -> str:  # mengembalikan string
     header += "Connection: keep-alive\n\n"  # menambahkan connection: keep-alive
     return header  # mengembalikan header
 
-
 def handle_request(client_connection: socket):  # menerima koneksi dari client
     request = client_connection.recv(1024)  # menerima request dari client
     data = bytes.decode(request)  # mendecode request dari client
@@ -59,7 +58,6 @@ def create_respon(FILE_NAME):
         header = http_header(200)  # mengembalikan 200 OK
     except Exception as e:  # jika terjadi exception
         print("Page not found" + str(e))  # menampilkan page not found
-        header = http_header(404)  # mengembalikan 404 Page not found
 
         file = open(os.path.join('file', 'error.html'), 'rb')  # membuka file error.html
         body = file.read()  # membaca file error.html
