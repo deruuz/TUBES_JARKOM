@@ -8,78 +8,78 @@ REQUEST_QUEUE_SIZE = 5
 FILE_DIRECTORY = 'file'
 
 #Menerima kode status HTTP dan mengembalikan string yang berisi header HTTP
-def http_header(code) -> str:
-	if code == 200:
-		header = "HTTP/1.1 200 OK\n"
-	elif code == 404:
-		header = "HTTP/1.1 404 Page not found\n"
+def http_header(code) -> str: #mengembalikan string
+	if code == 200: #jika kode 200 maka kembalikan 200 OK
+		header = "HTTP/1.1 200 OK\n" #mengembalikan 200 OK
+	elif code == 404: #jika kode 404 maka kembalikan 404 Page not found
+		header = "HTTP/1.1 404 Page not found\n" #mengembalikan 404 Page not found
 
-	header += "Server:Kelompok 8 Web Server\n"
-	header += "Connection: keep-alive\n\n"
-	return header
+	header += "Server:Kelompok 8 Web Server\n" #menambahkan server: kelompok 8 web server
+	header += "Connection: keep-alive\n\n" #menambahkan connection: keep-alive
+	return header #mengembalikan header
 
-def handle_request(client_connection:socket):
-	request = client_connection.recv(1024)
-	data = bytes.decode(request)
-	print(data)
+def handle_request(client_connection:socket): #menerima koneksi dari client
+	request = client_connection.recv(1024) #menerima request dari client
+	data = bytes.decode(request) #mendecode request dari client
+	print(data) #menampilkan request dari client
 
-	if len(data.split()) > 0:
-		method = data.split()[0]
-		print("data split 0",method)
+	if len(data.split()) > 0: #jika panjang data split lebih dari 0
+		method = data.split()[0] #mengambil method dari data split
+		print("data split 0",method) #menampilkan method dari data split
 
-		if method == 'GET' or method == 'HEAD':
-			resource = data.split()[1]
-			print("data split 1",resource)
-			resource = resource.split('?')[0]
-			print("resource split ?",resource.split('?'))
+		if method == 'GET' or method == 'HEAD': #jika method GET atau HEAD
+			resource = data.split()[1] #mengambil resource dari data split
+			print("data split 1",resource) #menampilkan resource dari data split
+			resource = resource.split('?')[0] #mengambil resource dari data split
+			print("resource split ?",resource.split('?'))	#menampilkan resource dari data split
 
-			if resource == '/':
-				resource = 'file\\index.html'
+			if resource == '/': #jika resource sama dengan /
+				resource = 'file\\index.html' #maka resource sama dengan file\index.html	
 
-			resource = FILE_DIRECTORY + resource
+			resource = FILE_DIRECTORY + resource #resource sama dengan file directory + resource
 
-			header, body = create_respon(resource)
-			http_response = header.encode()
-			if method == "GET":
-				http_response += body
-			client_connection.sendall(http_response)
-			print("HTTP Response: " + str(http_response) + "\n")
+			header, body = create_respon(resource) #membuat response dari resource
+			http_response = header.encode() #mengencode header
+			if method == "GET": #jika method GET
+				http_response += body #mengencode body
+			client_connection.sendall(http_response) #mengirim http response
+			print("HTTP Response: " + str(http_response) + "\n") #menampilkan http response
 
 def create_respon(FILE_NAME):
 	# membuat response dari filename, jika file tidak ditemukan maka kembalikan 404 dan halaman not found
 	try:
-		file = open(FILE_NAME, 'rb')
-		body = file.read()
-		file.close()
-		header = http_header(200)
-	except Exception as e:
-		print("Page not found" + str(e))
-		header = http_header(404)
+		file = open(FILE_NAME, 'rb') #membuka file
+		body = file.read() #membaca file
+		file.close() #menutup file
+		header = http_header(200) #mengembalikan 200 OK
+	except Exception as e: #jika terjadi exception
+		print("Page not found" + str(e)) #menampilkan page not found
+		header = http_header(404) #mengembalikan 404 Page not found
 
-		file = open('file\\error.html', 'rb')
-		body = file.read()
-		file.close()
-		header = http_header(404)
-	return header, body
+		file = open('file\\error.html', 'rb') #membuka file error.html
+		body = file.read() #membaca file error.html
+		file.close() #menutup file error.html
+		header = http_header(404) #mengembalikan 404 Page not found
+	return header, body #mengembalikan header dan body
 
-def serve_forever():
-	listen_socket = socket(AF_INET, SOCK_STREAM)
-	listen_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+def serve_forever(): #fungsi utama untuk menjalankan server
+	listen_socket = socket(AF_INET, SOCK_STREAM) #membuat socket
+	listen_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #mengatur socket
 
-	try:
-		listen_socket.bind(SERVER_ADDRESS)
-	except error as err:
-		print("Bind failed. " + str(err))
+	try: #mencoba untuk menjalankan server
+		listen_socket.bind(SERVER_ADDRESS) #mengikat socket ke alamat server
+	except error as err: #jika terjadi error
+		print("Bind failed. " + str(err)) #menampilkan bind failed
 
-	listen_socket.listen(REQUEST_QUEUE_SIZE)
+	listen_socket.listen(REQUEST_QUEUE_SIZE) #mendengarkan koneksi dari client
 
-	print("HTTP Sever running on port %s \n" % PORT)
+	print("HTTP Sever running on port %s \n" % PORT) #menampilkan HTTP Server running on port 8888
 
-	while True:
-		client_connection, client_address = listen_socket.accept()
-		handle_request(client_connection)
-		client_connection.close()
+	while True: #selama true
+		client_connection, client_address = listen_socket.accept() #menerima koneksi dari client
+		handle_request(client_connection) #menangani request dari client
+		client_connection.close() #menutup koneksi dari client
 
 #Memanggil fungsi utama serve_forever() untuk menjalankan server
 if __name__ == '__main__':
-	serve_forever()
+	serve_forever() #memanggil fungsi serve_forever() untuk menjalankan server
