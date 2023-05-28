@@ -4,13 +4,11 @@ from socket import *
 import os
 
 # Menginisialisasi alamat dan nomor port untuk server
-SERVER_ADDRESS = (HOST, PORT) = '0.0.0.0', 8888
+SERVER_ADDRESS = (HOST, PORT) = 'localhost', 8888
 # Menentukan ukuran antrian permintaan maksimum yang diterima oleh server
 REQUEST_QUEUE_SIZE = 5
 # Direktori tempat berkas-berkas website disimpan
 FILE_DIRECTORY = os.path.join(os.path.dirname(__file__), "file")
-print(FILE_DIRECTORY)
-
 
 # Menerima kode status HTTP dan mengembalikan string yang berisi header HTTP
 def http_header(code) -> str:  # mengembalikan string
@@ -34,9 +32,9 @@ def handle_request(client_connection: socket):  # menerima koneksi dari client
         print("data split 0", method)  # menampilkan method dari data split
 
         if method == 'GET' or method == 'HEAD':  # jika method GET atau HEAD
-            resource = data.split()[1]  # mengambil resource dari data split
+            resource = data.split()[1]  # mengambil path yang dicari dari client
             print("data split 1", resource)  # menampilkan resource dari data split
-            resource = resource.split('?')[0][1:]  # mengambil resource dari data split
+            resource = resource.split('?')[0][1:]  # memotong path resource sehingga tersisa hanya nama file saja
             print("resource split ?", resource.split('?'))  # menampilkan resource dari data split
 
             if resource == '/':  # jika resource sama dengan /
